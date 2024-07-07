@@ -5,7 +5,7 @@ import image2 from './images/soldier6.png';
 import image3 from './images/soldiers.png';
 import image4 from './images/soldiers2.png';
 import image5 from './images/soldiers3.png';
-import logo from './images/logo.png';
+import logo from './images/logo.jpg';
 
 const LandingPage = ({ navigateToMap }) => {
     const images = [image1, image2, image3, image4, image5];
