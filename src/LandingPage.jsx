@@ -1,75 +1,63 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import './landing_style.css';
-import soldiersImage from './images/soldiers.png';
-import soldiersImage2 from './images/soldiers2.png';
-import soldiersImage3 from './images/soldiers3.png';
-import soldiersImage4 from './images/soldiers4.png';
-import soldiersImage5 from './images/soldier5.png';
-import soldiersImage6 from './images/soldier6.png';
-import { auth, provider, signInWithPopup } from './firebaseConfig'; // Import Firebase config
+import image1 from './images/soldier5.png';
+import image2 from './images/soldier6.png';
+import image3 from './images/soldiers.png';
+import image4 from './images/soldiers2.png';
+import image5 from './images/soldiers3.png';
+import logo from './images/logo.png';
 
 const LandingPage = ({ navigateToMap }) => {
-  const carouselRef = useRef(null);
+    const images = [image1, image2, image3, image4, image5];
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (carouselRef.current) {
-        if (carouselRef.current.scrollLeft >= carouselRef.current.scrollWidth - carouselRef.current.offsetWidth) {
-          carouselRef.current.scrollLeft = 0;
-        } else {
-          carouselRef.current.scrollLeft += carouselRef.current.offsetWidth;
-        }
-      }
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleGoogleSignIn = async () => {
-    try {
-      await signInWithPopup(auth, provider);
-      alert("Signed in successfully!");
-    } catch (error) {
-      console.error("Error during sign-in:", error);
-    }
-  };
-
-  return (
-    <div className="landing-container">
-      <div className="carousel" ref={carouselRef}>
-        <img src={soldiersImage} alt="soldiers" />
-        <img src={soldiersImage2} alt="soldiers2" />
-        <img src={soldiersImage3} alt="soldiers3" />
-        <img src={soldiersImage4} alt="soldiers4" />
-        <img src={soldiersImage5} alt="soldiers5" />
-        <img src={soldiersImage6} alt="soldiers6" />
-      </div>
-      <button className="map-button" onClick={navigateToMap}>מעבר למפה</button>
-      <div className="description">
-        <h2>HEROCARE</h2>
-        <p>
-        מצדיעים לחיילי וחיילות המילואים ומציעים להם שלל טיפולים במסגרת התוכנית לטיפול רגשי וטיפול זוגי מטעם קרן הסיוע למשרתי המילואים.
-
-        במסגרת סל ההטבות למשרתים ב"חרבות ברזל",
-        במידה ושירתת למעלה מ-30 ימים בצו
-        8 הינך זכאי/ת להחזר של 1500 מטעם קרן עבור מגוון טיפולים הנמצאים באתר בהנחות משמעותיות עבור משרתי המילואים.
-
-
-        לטובת ההחזר מטעם הקרן:
-        הסיוע יוענק למשרת מילואים ומשפחתו (בן / בת הזוג וילדים מתחת לגיל 14) ששירת 30 ימים ומעלה במסגרת צו 8 "חרבות ברזל״
-        הסיוע יינתן בכפוף לתצהיר + קבלה שיגיש משרת המילואים ולא יותר מהתשלום בפועל. 
-        האחריות לקבלת ההחזר היא על מגיש הבקשה בלבד, כל עוד עומד בתנאי המימוש של הקרן לסיוע
-
-        יש לציין כי בנוסף להחזר מקרן הסיוע באתר מציע מגוון טיפולים במחירים מיוחדים עבור משרתי המילואים.
-
-      
-        </p>
-        <p>
-        מודים לכם על שירותכם צוות אתר ״HEROCARE”      
-        </p>
-      </div>
-    </div>
-  );
+    return (
+        <div className="landing-container">
+            <header className="top-bar">
+                <h1>HEROCARE</h1>
+            </header>
+            <div className="main-section">
+                <section className="hero">
+                    <h2>ברוכים הבאים ל- HEROCARE</h2>
+                    <p>תומכים בכוחותינו וביחד ננצח</p>
+                    <button className="cta-button" onClick={navigateToMap}>מצא טיפול</button>
+                </section>
+                <div className="carousel">
+                    {images.map((img, index) => (
+                        <img key={index} src={img} alt={`Slide ${index + 1}`} className="carousel-image" />
+                    ))}
+                </div>
+                <section className="info-section">
+                    <div className="info-content">
+                        <h3>למד עוד על השירותים שלנו</h3>
+                        <p>אנחנו מציאים מגוון מטפלים במגוון שירותים במסגרת מענק טיפול של צהל.</p>
+                    </div>
+                    <img src={images[0]} alt="Service Image" className="info-image"/>
+                </section>
+                <section className="testimonial-section">
+                    <div className="testimonial-header">
+                        <h2>מילואים מספרים</h2>
+                    </div>
+                    <div className="testimonial-content">
+                        <div className="testimonial-item">
+                            <img src={logo} alt="Logo" />
+                            <p>הגעתי עם ציפיות נמוכות אבל המטפל שלי היה כל כך טוב שאני אמשיך איתו גם אחרי.</p>
+                        </div>
+                        <div className="testimonial-item">
+                            <img src={logo} alt="Logo" />
+                            <p>הטיפול ברמה מאוד טובה. יש לאנשים פה לב זהב ומסירות נפש.</p>
+                        </div>
+                        <div className="testimonial-item">
+                            <img src={logo} alt="Logo" />
+                            <p>הורים וילדים למעלה מחודשיים ומעלה (בן / בת) הגורמים מתקנים קבע במדבר.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <footer>
+                <p>ברוך הבא לרשת מציאת טיפולים, תודה על שירותך</p>
+            </footer>
+        </div>
+    );
 };
 
 export default LandingPage;
