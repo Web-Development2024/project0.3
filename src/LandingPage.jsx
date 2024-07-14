@@ -1,6 +1,11 @@
 import React, { useEffect } from 'react';
 import './landing_style.css';
 import spaImage1 from './images/spa1.jpeg';
+import spaImage2 from './images/spa2.jpeg';
+import spaImage3 from './images/spa3.jpeg';
+import spaImage4 from './images/spa4.jpeg';
+import spaImage5 from './images/spa5.jpeg';
+import spaImage6 from './images/spa6.jpeg';
 import spaImage8 from './images/spa8.jpeg';
 import spaImage9 from './images/spa9.jpeg';
 import spaImage10 from './images/spa10.jpeg';
@@ -41,7 +46,7 @@ const SoldierWellnessPage = () => {
       </header>
 
       <main className="spa-main">
-        <section className="spa-info fade-in parallax" style={{ backgroundImage: `url(${spaImage1})` }}>
+        <section className="spa-info fade-in parallax" style={{ backgroundImage: `url(${spaImage5})` }}>
           <div className="overlay">
             <h2>ברוכים הבאים ל-HEROCARE Wellness</h2>
             <p>
@@ -66,17 +71,17 @@ const SoldierWellnessPage = () => {
               <p>רשימת מטפלים שמציעים עיסויים מרגיעים במחירים נוחים.</p>
             </div>
             <div className="service-card">
-              <img src={spaImage8} alt="Alternative Medicine" />
+              <img src={spaImage2} alt="Alternative Medicine" />
               <h3>רפואה אלטרנטיבית</h3>
               <p>טיפולים אלטרנטיביים כמו דיקור סיני, ארומתרפיה ורייקי.</p>
             </div>
             <div className="service-card">
-              <img src={spaImage9} alt="Yoga" />
+              <img src={spaImage3} alt="Yoga" />
               <h3>סדנאות יוגה ומדיטציה</h3>
               <p>סדנאות לשיפור הבריאות הנפשית והפיזית.</p>
             </div>
             <div className="service-card">
-              <img src={spaImage10} alt="Facial Treatments" />
+              <img src={spaImage4} alt="Facial Treatments" />
               <h3>טיפולי פנים</h3>
               <p>טיפולי פנים לשיפור בריאות העור והענקת זוהר.</p>
             </div>
@@ -87,14 +92,14 @@ const SoldierWellnessPage = () => {
           <h2>מהי רפואה אלטרנטיבית?</h2>
           <div className="medicine-grid">
             <div className="medicine-item">
-              <img src={spaImage8} alt="Acupuncture" />
+              <img src={spaImage6} alt="Acupuncture" />
               <div className="text">
                 <h3>דיקור סיני</h3>
                 <p>טיפול שמקדם ריפוי טבעי ומפחית מתחים על ידי הכנסת מחטים לנקודות מסוימות בגוף.</p>
               </div>
             </div>
             <div className="medicine-item">
-              <img src={spaImage8} alt="Aromatherapy" />
+              <img src={spaImage9} alt="Aromatherapy" />
               <div className="text">
                 <h3>ארומתרפיה</h3>
                 <p>שימוש בשמנים אתריים טבעיים מצמחים ליצירת תחושת רוגע ותמיכה בבריאות.</p>
