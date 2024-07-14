@@ -34,24 +34,32 @@ const SoldierWellnessPage = () => {
     <div className="spa-container">
       <header className="spa-header" style={{ backgroundImage: `url(${spaImage8})` }}>
         <div className="header-content">
-          <img src={logo} alt="HEROCARE Logo" className="logo" />
+          {/* <img src={logo} alt="HEROCARE Logo" className="logo" /> */}
           <h1>HEROCARE Wellness</h1>
           <h2>מציאת טיפולים זולים לחיילים וחיילות המילואים</h2>
         </div>
       </header>
 
       <main className="spa-main">
-        <section className="spa-info fade-in">
-          <h2>ברוכים הבאים ל-HEROCARE Wellness</h2>
+        <section className="spa-info fade-in parallax" style={{ backgroundImage: `url(${spaImage1})` }}>
+          <div className="overlay">
+            <h2>ברוכים הבאים ל-HEROCARE Wellness</h2>
+            <p>
+              המקום המושלם למצוא טיפולים זולים ומרגיעים לחיילים וחיילות המילואים. אנו כאן לעזור לכם למצוא טיפולים אלטרנטיביים ועיסויים במחירים נוחים.
+            </p>
+          </div>
+        </section>
+
+        <section className="about-us fade-in">
+          <h2>About Us</h2>
           <p>
-            המקום המושלם למצוא טיפולים זולים ומרגיעים לחיילים וחיילות המילואים. אנו כאן לעזור לכם למצוא טיפולים אלטרנטיביים ועיסויים במחירים נוחים.
+            HEROCARE Wellness is dedicated to providing affordable and relaxing treatments for soldiers and reservists. Our mission is to support the well-being of those who serve by offering access to high-quality alternative therapies and massages.
           </p>
         </section>
 
         <section className="services fade-in">
           <h2>השירותים שלנו</h2>
           <div className="service-grid">
-            {/* Each service has a dedicated card with an image and description */}
             <div className="service-card">
               <img src={spaImage1} alt="Massage" />
               <h3>עיסויים</h3>
@@ -78,7 +86,6 @@ const SoldierWellnessPage = () => {
         <section className="alternative-medicine fade-in">
           <h2>מהי רפואה אלטרנטיבית?</h2>
           <div className="medicine-grid">
-            {/* Detailed descriptions for each type of alternative medicine */}
             <div className="medicine-item">
               <img src={spaImage8} alt="Acupuncture" />
               <div className="text">
@@ -105,14 +112,37 @@ const SoldierWellnessPage = () => {
 
         <section className="testimonials fade-in">
           <h2>עדויות</h2>
-          <div className="testimonial-item">
-            <p>"החוויה עם HEROCARE הייתה מדהימה. מצאתי טיפולים איכותיים במחירים נוחים מאוד." - שרית</p>
+          <div className="testimonial-carousel">
+            <div className="testimonial-item">
+              <p>"החוויה עם HEROCARE הייתה מדהימה. מצאתי טיפולים איכותיים במחירים נוחים מאוד." - שרית</p>
+            </div>
+            <div className="testimonial-item">
+              <p>"הטיפולים עזרו לי להירגע אחרי שירות אינטנסיבי. ממליץ בחום!" - יואב</p>
+            </div>
+            <div className="testimonial-item">
+              <p>"דיקור סיני וארומתרפיה עזרו לי להיפטר מהכאב כרוני ולמצוא רוגע." - דניאל</p>
+            </div>
           </div>
-          <div className="testimonial-item">
-            <p>"הטיפולים עזרו לי להירגע אחרי שירות אינטנסיבי. ממליץ בחום!" - יואב</p>
-          </div>
-          <div className="testimonial-item">
-            <p>"דיקור סיני וארומתרפיה עזרו לי להיפטר מהכאב כרוני ולמצוא רוגע." - דניאל</p>
+        </section>
+
+        <section className="latest-news fade-in">
+          <h2>Latest News</h2>
+          <div className="news-grid">
+            <div className="news-item">
+              <img src={soldierImage7} alt="News 1" />
+              <h3>New Massage Therapies Available</h3>
+              <p>Discover our new range of massage therapies now available for soldiers and reservists.</p>
+            </div>
+            <div className="news-item">
+              <img src={soldierImage9} alt="News 2" />
+              <h3>Yoga and Meditation Workshops</h3>
+              <p>Join our upcoming yoga and meditation workshops to improve your mental and physical health.</p>
+            </div>
+            <div className="news-item">
+              <img src={soldierImage10} alt="News 3" />
+              <h3>Special Discounts for Reservists</h3>
+              <p>Take advantage of our special discounts on all treatments for reservists this month.</p>
+            </div>
           </div>
         </section>
 
