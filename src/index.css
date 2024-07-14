@@ -6,16 +6,44 @@ body {
 }
 
 .container {
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  height: 100vh;
 }
 
 .header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   padding: 10px;
-  background-color: #282c34;
+  background-color: #f8f9fa;
+}
+
+.header button, .header span {
+  margin: 0 10px;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 50px); /* Adjust height based on header */
+}
+
+.list-section {
+  width: 30%;
+  overflow-y: auto;
+  background-color: #e0f7fa;
+  padding: 10px;
+}
+
+.map-section {
+  width: 70%;
+  position: relative;
+  background-color: #f0f0f0;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
 }
 
 .form-toggle-button {
@@ -30,25 +58,6 @@ body {
 
 .form-toggle-button:hover {
   background-color: #162d6a; /* Darker blue on hover */
-}
-
-.main-content {
-  display: flex;
-  height: calc(100vh - 50px); /* Adjust height based on header */
-}
-
-.map-section {
-  flex: 1;
-  background-color: #f0f0f0;
-  width: 50%;
-}
-
-.list-section {
-  flex: 1;
-  background-color: #e0f7fa;
-  overflow-y: auto;
-  padding: 10px;
-  width: 50%;
 }
 
 .therapist-card {
@@ -71,10 +80,6 @@ body {
   padding: 10px;
   background-color: #f1f1f1;
   border-bottom: 1px solid #ddd;
-}
-
-.header button, .header span {
-  margin: 0 10px;
 }
 
 .login-modal {
@@ -112,4 +117,51 @@ body {
 
 .skip-button:hover {
   background-color: #555;
+}
+
+.hovered-therapist-info {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  z-index: 1000;
+  width: 450px; /* Wider width */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hovered-therapist-info img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  z-index: 1000;
+  width: 300px; /* Wider width */
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.close-button {
+  align-self: flex-end;
+  cursor: pointer;
 }

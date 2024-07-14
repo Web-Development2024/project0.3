@@ -1,9 +1,14 @@
 import React from 'react';
 import './TherapistCard.css';
 
-const TherapistCard = ({ therapist }) => {
+const TherapistCard = ({ therapist, onHover, onClick }) => {
   return (
-    <div className="therapist-card">
+    <div 
+      className="therapist-card"
+      onMouseEnter={() => onHover(therapist)}
+      onMouseLeave={() => onHover(null)}
+      onClick={() => onClick(therapist)}
+    >
       <div className="therapist-header">
         <h3>{therapist.name}</h3>
         <p className="therapist-about">{therapist.about}</p>
@@ -21,6 +26,5 @@ const TherapistCard = ({ therapist }) => {
     </div>
   );
 };
-
 
 export default TherapistCard;
