@@ -41,26 +41,27 @@ const SoldierWellnessPage = () => {
         <div className="header-content">
           {/* <img src={logo} alt="HEROCARE Logo" className="logo" /> */}
           <h1>HEROCARE Wellness</h1>
-          <h2>מציאת טיפולים זולים לחיילים וחיילות המילואים</h2>
+          <h2>הדרך החכמה לנצל את המענק</h2>
         </div>
       </header>
 
       <main className="spa-main">
-        <section className="spa-info fade-in parallax" style={{ backgroundImage: `url(${spaImage5})` }}>
+        <section className="spa-info fade-in parallax" 
+        style={{ backgroundImage: `url(${spaImage5})` }}
+        >
           <div className="overlay">
             <h2>ברוכים הבאים ל-HEROCARE Wellness</h2>
             <p>
-              המקום המושלם למצוא טיפולים זולים ומרגיעים לחיילים וחיילות המילואים. אנו כאן לעזור לכם למצוא טיפולים אלטרנטיביים ועיסויים במחירים נוחים.
-            </p>
+אצלנו תמצאו את המטפלים הכי טובים, במחירים הכי משתלמים, ובדרך הכי נוחה!<br></br> הכל כדי להקל עליכם את התהליך, שלא תצטרכו לעבוד קשה יותר משכבר עבדתם.            </p>
           </div>
         </section>
 
-        <section className="about-us fade-in">
+        {/* <section className="about-us fade-in">
           <h2>About Us</h2>
           <p>
             HEROCARE Wellness is dedicated to providing affordable and relaxing treatments for soldiers and reservists. Our mission is to support the well-being of those who serve by offering access to high-quality alternative therapies and massages.
           </p>
-        </section>
+        </section> */}
 
         <section className="services fade-in">
           <h2>השירותים שלנו</h2>

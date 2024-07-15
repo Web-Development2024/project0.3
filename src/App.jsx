@@ -321,12 +321,15 @@ function App() {
     <div className="container">
       {currentPage !== 'login' && (
         <div className="header">
+          <div className='login_hi'>
           <span>Hi, {user ? user.displayName : "Guest"}</span>
           {user ? (
             <button onClick={handleSignOut}>Sign Out</button>
           ) : (
             <button onClick={handleGoogleSignIn}>Sign In</button>
           )}
+          </div>
+          <div className='headerButtons'>
           <button className="form-toggle-button" onClick={() => setCurrentPage('landing')}>
             בית
           </button>
@@ -336,6 +339,7 @@ function App() {
           <button className="form-toggle-button" onClick={navigateToForm}>
             הוסף מטפל חדש
           </button>
+          </div>
         </div>
       )}
       {currentPage === 'login' && (
