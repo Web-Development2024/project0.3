@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import './form_style.css';
 
+import { db, storage} from './firebaseConfig';
+import { collection, addDoc} from "firebase/firestore"
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { v4 } from 'uuid';
+
 const TherapistForm = ({ onFormSubmit }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -16,6 +21,31 @@ const TherapistForm = ({ onFormSubmit }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [imageUpload, setImageUpload] = useState(null);
+  const [certificateUpload, setCertificateUpload] = useState(null);
+
+  const FileTypes = Object.freeze({
+    PROFILE_IMG: 0,
+    CERTIFICATE: 1
+  });
+
+  const dbMap = {
+    [FileTypes.PROFILE_IMG]: 'profile/profile_',
+    [FileTypes.CERTIFICATE]: 'certificates/cert_'
+  }
+
+  const uploadFile = async (file, type, id) => {
+    if (file == null) return;
+    const fileName = file.name;
+    const filename = dbMap[type]+ id;
+    const fileRef = ref(storage, filename);
+    console.log("uploading bytes");
+    await uploadBytes(fileRef, file);
+    console.log("getting download url");
+    const downloadURL = await getDownloadURL(fileRef);
+    console.log("got download url");
+    return downloadURL;
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -39,6 +69,33 @@ const TherapistForm = ({ onFormSubmit }) => {
     }
   };
 
+  const addTherapistData = async () => {
+    try {
+      const id = v4();
+      console.log("STARTING addTherapistData");
+      const profile_image_path = await uploadFile(imageUpload, FileTypes.PROFILE_IMG, id);
+      console.log("UPLOADED PROFILE IMAGE");
+      const certificate_path = await uploadFile(certificateUpload, FileTypes.CERTIFICATE, id);
+      console.log("UPLOADED CERTIFICATE");
+      console.log("ADDING TO DB");
+      await addDoc(collection(db, "therapist-data"), {
+        name: formData.name,
+        phone: formData.phone,
+        categories: formData.categories,
+        city: formData.city,
+        address: formData.address,
+        about: formData.about,
+        discountType: formData.discountType,
+        profile_image: profile_image_path,
+        certificate: certificate_path
+      });
+      
+      alert('הרשמתך התקבלה.');
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   const handleNextStep = () => {
     if (currentStep === 1 && formData.name && formData.phone) {
       setCurrentStep(2);
@@ -58,6 +115,7 @@ const TherapistForm = ({ onFormSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    addTherapistData();
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSubmitted(true);
@@ -93,7 +151,7 @@ const TherapistForm = ({ onFormSubmit }) => {
       <form onSubmit={handleSubmit}>
         {currentStep === 1 && (
           <div className="step-form">
-            <h2>בואו נכיר :)</h2>
+            <h2>בואו נכיר :</h2>
             <label htmlFor="name">שם: *</label>
             <input
               type="text"
@@ -207,7 +265,7 @@ const TherapistForm = ({ onFormSubmit }) => {
               type="file"
               id="documents"
               name="documents"
-              onChange={handleChange}
+              onChange={(event) => {setImageUpload(event.target.files[0])}}
               multiple
             />
             <br></br>
@@ -216,7 +274,7 @@ const TherapistForm = ({ onFormSubmit }) => {
               type="file"
               id="profilePicture"
               name="profilePicture"
-              onChange={handleChange}
+              onChange={(event) => {setCertificateUpload(event.target.files[0])}}
             />
             <div id="form-navigation">
               <button type="button" className="prev-button" onClick={handlePrevStep}>הקודם</button>
