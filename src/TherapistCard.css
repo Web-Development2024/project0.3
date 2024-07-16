@@ -9,6 +9,9 @@ body {
 }
 
 .form-container {
+  font-family: 'Assistant', sans-serif !important;
+  align-items: center;
+  margin-top: 100px !important;
   height: 600px;
   width: 500px !important; 
   margin: 150px auto;
@@ -19,7 +22,7 @@ body {
   background-color: #fafafa !important;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  position: relative;
 }
 
 .step-indicators {
@@ -35,7 +38,6 @@ body {
   font-weight: bolder;
   border-bottom: 2px solid #ddd;
   color: #999;
-
 }
 
 .step.active {
@@ -46,8 +48,7 @@ body {
 form {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  justify-content: space-between;
+  flex-grow: 1; /* Allow the form to take up remaining space */
 }
 
 label, input, textarea {
@@ -56,14 +57,18 @@ label, input, textarea {
 }
 
 input[type="text"], input[type="email"], textarea {
+  font-family: 'Assistant', sans-serif !important;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  width: 100%;
+  width: 360px; /* Set a specific width in pixels */
+  height: 40px;
   box-sizing: border-box;
 }
+
 .questions {
-  height: 500px;
+  font-family: 'Assistant', sans-serif !important;
+  height: 400px;
 }
 
 button {
@@ -81,18 +86,20 @@ button:hover {
 }
 
 .next-button, .prev-button {
-  width: 50%;
+  width: 40%;
   margin: 5px 1%;
+  height: 45px;
 }
 
-.next-button {
-  margin-left: auto;
+.cont-button {
+  width: 40%;
+  margin: 5px 1%;
+  height: 45px;
 }
-
 .submit-button {
-  width: 100%;
-  margin-bottom: 3px !important;
-}
+  width: 40%;
+  margin: 5px 1%;
+  height: 45px;}
 
 /* Background image for upper half */
 body::before {
@@ -115,6 +122,7 @@ input:invalid {
 
 /* Loading animation and success message */
 .loading-container {
+  font-family: 'Assistant', sans-serif !important;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -140,19 +148,59 @@ input:invalid {
   justify-content: center;
   align-items: center;
   height: 100%;
-  font-size: 1.5em;
+  font-size: 2em;
   color: #4CAF50;
+  font-weight: bolder;
 }
 
 .form-navigation {
-  width: 90px !important;
-  float: left;
   display: flex;
-  position: static;
-  justify-content: flex-end;
   align-items: center;
-  margin-top: auto;
-  padding-top: 20px;
-  bottom: 0px !important;
- 
+  margin-top: auto; /* Push to the bottom */
+  width: 100%;
+}
+
+/* Center the button if there is only one */
+.form-navigation:only-child {
+  justify-content: center;
+}
+
+/* Place buttons on opposite sides if there are two */
+.form-navigation:not(:only-child) {
+  justify-content: space-between;
+}
+
+.prev-button, .next-button {
+  width: 48%;
+}
+
+/* Ensure the submit button takes full width when alone */
+.submit-button {
+  width: 100%;
+}
+
+
+.option-button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.option-button.selected {
+  background-color: #d49a89; /* Selected state color */
+  color: white;
+}
+
+.option-button:hover {
+  background-color: #bf7762; /* Hover state color */
+  color: white;
+}
+
+.hidden-checkbox {
+  display: none;
 }

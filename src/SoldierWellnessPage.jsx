@@ -12,6 +12,7 @@ import pressImage from './images/press-background.jpeg';
 
 const SoldierWellnessPage = () => {
   useEffect(() => {
+    // Setup the intersection observer for the fade-in effect
     const elements = document.querySelectorAll('.fade-in');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -25,6 +26,7 @@ const SoldierWellnessPage = () => {
       observer.observe(element);
     });
 
+    // Cleanup the observer when the component unmounts
     return () => observer.disconnect();
   }, []);
 
@@ -49,6 +51,7 @@ const SoldierWellnessPage = () => {
         <section className="services fade-in">
           <h2>השירותים שלנו</h2>
           <div className="service-grid">
+            {/* Each service has a dedicated card with an image and description */}
             <div className="service-card">
               <img src={spaImage1} alt="Massage" />
               <h3>עיסויים</h3>
@@ -75,6 +78,7 @@ const SoldierWellnessPage = () => {
         <section className="alternative-medicine fade-in">
           <h2>מהי רפואה אלטרנטיבית?</h2>
           <div className="medicine-grid">
+            {/* Detailed descriptions for each type of alternative medicine */}
             <div className="medicine-item">
               <img src={spaImage8} alt="Acupuncture" />
               <div className="text">

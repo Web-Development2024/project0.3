@@ -319,29 +319,24 @@ function App() {
 
   return (
     <div className="container">
-      {currentPage !== 'login' && (
+      <div className={`header-container ${currentPage === 'landing' ? 'sticky-header' : ''}`}>
         <div className="header">
           <div className='login_hi'>
-          <span>Hi, {user ? user.displayName : "Guest"}</span>
-          {user ? (
-            <button onClick={handleSignOut}>Sign Out</button>
-          ) : (
-            <button onClick={handleGoogleSignIn}>Sign In</button>
-          )}
+            <span>היי, {user ? user.displayName : "Guest"}</span>
+            {user ? (
+              <button onClick={handleSignOut}>Sign Out</button>
+            ) : (
+              <button onClick={handleGoogleSignIn}>Sign In</button>
+            )}
           </div>
           <div className='headerButtons'>
-          <button className="form-toggle-button" onClick={() => setCurrentPage('landing')}>
-            בית
-          </button>
-          <button className="form-toggle-button" onClick={navigateToMap}>
-            הצג מפה
-          </button>
-          <button className="form-toggle-button" onClick={navigateToForm}>
-            הוסף מטפל חדש
-          </button>
+            <button className="form-toggle-button" onClick={navigateToMap}>הטיפולים שלנו</button>
+            <button className="form-toggle-button" onClick={navigateToForm}> רוצה לטפל</button>
+            <button className="form-toggle-button" onClick={() => setCurrentPage('landing')}>בית</button>
           </div>
         </div>
-      )}
+      </div>
+
       {currentPage === 'login' && (
         <div className="login-modal">
           <button className="google-signin-button" onClick={handleGoogleSignIn}>Sign in with Google</button>
@@ -379,7 +374,7 @@ function App() {
           )}
         </div>
       )}
-      {currentPage === 'form' && <TherapistForm onFormSubmit={handleFormSubmit} />}
+      {currentPage === 'form' && <TherapistForm onFormSubmit={handleFormSubmit} navigateToMap={navigateToMap} />}
     </div>
   );
 }

@@ -56,12 +56,12 @@ const SoldierWellnessPage = () => {
           </div>
         </section>
 
-        {/* <section className="about-us fade-in">
-          <h2>About Us</h2>
-          <p>
-            HEROCARE Wellness is dedicated to providing affordable and relaxing treatments for soldiers and reservists. Our mission is to support the well-being of those who serve by offering access to high-quality alternative therapies and massages.
-          </p>
-        </section> */}
+       <section className="questionire">
+          <h2>בואו להבין מהו הטיפול שאתם מחפשים<br></br> בכמה שאלות בלבד! </h2>
+          <button className='testBut'>
+לשאלון ההכוונה שלנו -{'>'}
+          </button>
+        </section> 
 
         <section className="services fade-in">
           <h2>השירותים שלנו</h2>

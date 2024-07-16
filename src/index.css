@@ -5,6 +5,8 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  background: linear-gradient(to bottom, #fafafa 50%, #ecd8d2 50%);
+  position: relative;
 }
 
 .container {
@@ -16,8 +18,19 @@ body {
 .header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  width: 100%;
   padding: 8px;
   background-color: rgba(255, 255, 255, 0.5);
+  box-sizing: border-box;
+}
+
+.header.sticky-header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 10;
+  box-sizing: border-box;
 }
 
 .header button, .header span {
@@ -28,12 +41,13 @@ body {
   display: flex;
   flex: 1;
   height: calc(100vh - 50px); /* Adjust height based on header */
+  padding-top: 60px; /* To make room for the fixed header */
 }
 
 .list-section {
   width: 30%;
   overflow-y: auto;
-  background-color: #e0f7fa;
+  background-color: #3b3d5763;
   padding: 10px;
 }
 
@@ -75,21 +89,6 @@ body {
   background-color: #f5e9e6;
 }
 
-
-.container {
-  position: relative;
-  font-family: 'Playfair Display', serif;
-  font-size: larger;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  background-color: #f1f1f1;
-  border-bottom: 1px solid #ddd;
-}
-
 .login-modal {
   position: fixed;
   top: 50%;
@@ -128,11 +127,13 @@ body {
 }
 
 .hovered-therapist-info {
+  font-family: 'Assistant', sans-serif;
+  font-size: large;
   position: fixed;
   right: 15%;
   top: 54%;
   transform: translate(-50%, -50%);
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.673);
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
@@ -174,4 +175,49 @@ body {
 .close-button {
   align-self: flex-end;
   cursor: pointer;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('./images/spa8.jpeg') no-repeat center center;
+  background-size: cover;
+  z-index: -1;
+  filter: brightness(50%);
+}
+
+.header-container {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.option-button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.option-button.selected {
+  background-color: #d49a89; /* Selected state color */
+  color: white;
+}
+
+.option-button:hover {
+  background-color: #bf7762; /* Hover state color */
+  color: white;
+}
+
+.hidden-checkbox {
+  display: none;
 }
