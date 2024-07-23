@@ -4,8 +4,7 @@ import Map from './Map.jsx';
 import TherapistForm from './TherapistForm.jsx';
 import LandingPage from './LandingPage.jsx';
 import { auth, provider, signInWithPopup, signOut, db } from './firebaseConfig';
-import { collection, getDocs, getDoc, doc} from "firebase/firestore";
-
+import { collection, getDocs } from "firebase/firestore";
 import './index.css';
 
 function App() {
@@ -27,28 +26,43 @@ function App() {
 
   useEffect(() => {
     getTherapists();
-    const allMarkers = therapists.flatMap(therapist => therapist.address.map(addr => ({
-      lat: addr.lat,
-      lng: addr.lng,
-      name: therapist.name,
-      isSelected: false
-    })));
-    setMarkers(allMarkers);
   }, []);
 
-  const getTherapists = async() => {
+  useEffect(() => {
+    if (therapists.length > 0) {
+      console.log('Therapists:', therapists);
+      const allMarkers = therapists.map(therapist => {
+        const address = therapist.address;
+        if (address && address.lat && address.lng) {
+          return {
+            lat: address.lat,
+            lng: address.lng,
+            name: therapist.name,
+            isSelected: false,
+            id: therapist.id,
+          };
+        }
+        console.log(`Invalid address for therapist ${therapist.name}:`, address);
+        return null;
+      }).filter(marker => marker !== null);
+      console.log('All Markers:', allMarkers);
+      setMarkers(allMarkers);
+    }
+  }, [therapists]);
+
+  const getTherapists = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, 'therapist-data'));
       const therapistsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      console.log('Fetched Therapists Data:', therapistsData);
       setTherapists(therapistsData);
-      console.log("setTherapists");
     } 
     catch (error) {
       console.error("Error fetching therapists data: ", error);
     } 
     finally {
       setLoading(false);
-  }
+    }
   };
 
   const handleCardHover = (therapist) => {
@@ -60,13 +74,14 @@ function App() {
     setSelectedTherapist(therapist);
     const newMarkers = markers.map(marker => ({
       ...marker,
-      isSelected: therapist.address.some(addr => addr.lat === marker.lat && addr.lng === marker.lng)
+      isSelected: therapist.id === marker.id,
     }));
     setMarkers(newMarkers);
   };
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = async (newTherapist) => {
     setCurrentPage('map');
+    await getTherapists(); // Ensure the markers are updated after a new therapist is added
   };
 
   const handleGoogleSignIn = async () => {
@@ -123,33 +138,28 @@ function App() {
     }
   };
 
-  const fetchProfilePicture = async (imageId) => {
-    const docRef = doc(db, profile, imageId);
-    const docSnap = await getDoc(docRef);
-  }
-
   return (
     <div className="container">
       {currentPage !== 'login' && (
         <div className="header">
           <div className='login_hi'>
-          <span>Hi, {user ? user.displayName : "Guest"}</span>
-          {user ? (
-            <button onClick={handleSignOut}>Sign Out</button>
-          ) : (
-            <button onClick={handleGoogleSignIn}>Sign In</button>
-          )}
+            <span>Hi, {user ? user.displayName : "Guest"}</span>
+            {user ? (
+              <button onClick={handleSignOut}>Sign Out</button>
+            ) : (
+              <button onClick={handleGoogleSignIn}>Sign In</button>
+            )}
           </div>
           <div className='headerButtons'>
-          <button className="form-toggle-button" onClick={() => setCurrentPage('landing')}>
-            בית
-          </button>
-          <button className="form-toggle-button" onClick={navigateToMap}>
-            הצג מפה
-          </button>
-          <button className="form-toggle-button" onClick={navigateToForm}>
-            הוסף מטפל חדש
-          </button>
+            <button className="form-toggle-button" onClick={() => setCurrentPage('landing')}>
+              בית
+            </button>
+            <button className="form-toggle-button" onClick={navigateToMap}>
+              הצג מפה
+            </button>
+            <button className="form-toggle-button" onClick={navigateToForm}>
+              הוסף מטפל חדש
+            </button>
           </div>
         </div>
       )}
@@ -164,14 +174,12 @@ function App() {
         <div className="main-content">
           <div className="list-section">
             {therapists.map((therapist) => (
-              <div 
-                key={therapist.id} 
-                onMouseEnter={() => handleCardHover(therapist)}
-                onMouseLeave={() => handleCardHover(null)}
-                onClick={() => handleCardClick(therapist)}
-              >
-                <TherapistCard therapist={therapist} />
-              </div>
+              <TherapistCard
+                key={therapist.id}
+                therapist={therapist}
+                onHover={handleCardHover}
+                onClick={handleCardClick}
+              />
             ))}
           </div>
           <div className="map-section">
