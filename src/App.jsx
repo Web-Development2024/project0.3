@@ -5,7 +5,33 @@ import TherapistForm from './TherapistForm.jsx';
 import LandingPage from './LandingPage.jsx';
 import { auth, provider, signInWithPopup, signOut, db } from './firebaseConfig';
 import { collection, getDocs } from "firebase/firestore";
+import axios from 'axios';
 import './index.css';
+
+const geocodeAddress = async (address) => {
+  try {
+    console.log(`Geocoding address: ${address}`);
+    const response = await axios.get(`https://nominatim.openstreetmap.org/search`, {
+      params: {
+        q: address,
+        format: 'json',
+        addressdetails: 1,
+        limit: 1,
+      }
+    });
+
+    if (response.data && response.data.length > 0) {
+      const { lat, lon } = response.data[0];
+      return { lat: parseFloat(lat), lng: parseFloat(lon) };
+    } else {
+      console.error('Geocoding API error: No results found for', address);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching geocoding data:', error);
+    return null;
+  }
+};
 
 function App() {
   const [markers, setMarkers] = useState([]);
@@ -31,22 +57,30 @@ function App() {
   useEffect(() => {
     if (therapists.length > 0) {
       console.log('Therapists:', therapists);
-      const allMarkers = therapists.map(therapist => {
-        const address = therapist.address;
-        if (address && address.lat && address.lng) {
-          return {
-            lat: address.lat,
-            lng: address.lng,
-            name: therapist.name,
-            isSelected: false,
-            id: therapist.id,
-          };
-        }
-        console.log(`Invalid address for therapist ${therapist.name}:`, address);
-        return null;
-      }).filter(marker => marker !== null);
-      console.log('All Markers:', allMarkers);
-      setMarkers(allMarkers);
+      const fetchMarkers = async () => {
+        const allMarkers = await Promise.all(therapists.map(async (therapist) => {
+          const address = `${therapist.address}, ${therapist.city}`;
+          console.log(`Fetching location for: ${address}`);
+          const location = await geocodeAddress(address);
+          if (location) {
+            console.log(`Geocoded location for ${therapist.name}:`, location);
+            return {
+              lat: location.lat,
+              lng: location.lng,
+              name: therapist.name,
+              isSelected: false,
+              id: therapist.id,
+            };
+          } else {
+            console.log(`Invalid address for therapist ${therapist.name}:`, address);
+            return null;
+          }
+        }));
+        const validMarkers = allMarkers.filter(marker => marker !== null);
+        console.log('All Markers:', validMarkers);
+        setMarkers(validMarkers);
+      };
+      fetchMarkers();
     }
   }, [therapists]);
 
@@ -69,14 +103,27 @@ function App() {
     setHoveredTherapist(therapist);
   };
 
-  const handleCardClick = (therapist) => {
+  const handleCardClick = async (therapist) => {
     setHoveredTherapist(null);
-    setSelectedTherapist(therapist);
-    const newMarkers = markers.map(marker => ({
-      ...marker,
-      isSelected: therapist.id === marker.id,
-    }));
-    setMarkers(newMarkers);
+
+    const address = `${therapist.address}, ${therapist.city}`;
+    console.log(`Geocoding selected therapist's address: ${address}`);
+    const location = await geocodeAddress(address);
+
+    if (location) {
+      therapist.lat = location.lat;
+      therapist.lng = location.lng;
+      setSelectedTherapist(therapist);
+      console.log('Selected Therapist:', therapist);
+
+      const newMarkers = markers.map(marker => ({
+        ...marker,
+        isSelected: therapist.id === marker.id,
+      }));
+      setMarkers(newMarkers);
+    } else {
+      console.error(`Failed to geocode address for selected therapist: ${therapist.name}`);
+    }
   };
 
   const handleFormSubmit = async (newTherapist) => {

@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import axios from 'axios';
 import 'leaflet/dist/leaflet.css';
 
 const greyPinSvg = `
@@ -22,79 +21,26 @@ const createIcon = (color) => {
   });
 };
 
-const geocodeAddress = async (address) => {
-  try {
-    console.log(`Geocoding address: ${address}`);
-    const response = await axios.get(`https://nominatim.openstreetmap.org/search`, {
-      params: {
-        q: address,
-        format: 'json',
-        addressdetails: 1,
-        limit: 1,
-      }
-    });
-
-    if (response.data && response.data.length > 0) {
-      const { lat, lon } = response.data[0];
-      return { lat: parseFloat(lat), lng: parseFloat(lon) };
-    } else {
-      console.error('Geocoding API error: No results found');
-      return null;
-    }
-  } catch (error) {
-    console.error('Error fetching geocoding data:', error);
-    return null;
-  }
-};
-
-const UpdateMapView = ({ userLocation, selectedTherapist }) => {
+const UpdateMapView = ({ selectedTherapist, userLocation }) => {
   const map = useMap();
 
   useEffect(() => {
-    const updateView = async () => {
-      if (selectedTherapist && selectedTherapist.address) {
-        const location = await geocodeAddress(selectedTherapist.address);
-        if (location) {
-          map.setView([location.lat, location.lng], 14);
-        } else {
-          console.error('Failed to geocode address');
-        }
-      } else if (userLocation) {
-        map.setView([userLocation.lat, userLocation.lng], 14);
-      }
-    };
-
-    updateView();
-  }, [userLocation, selectedTherapist, map]);
+    if (selectedTherapist && selectedTherapist.lat && selectedTherapist.lng) {
+      console.log(`Updating map view to therapist location: ${selectedTherapist.lat}, ${selectedTherapist.lng}`);
+      map.setView([selectedTherapist.lat, selectedTherapist.lng], 14);
+    } else if (userLocation) {
+      console.log(`Updating map view to user location: ${userLocation.lat}, ${userLocation.lng}`);
+      map.setView([userLocation.lat, userLocation.lng], 14);
+    }
+  }, [selectedTherapist, userLocation, map]);
 
   return null;
 };
 
 const Map = ({ markers, userLocation, selectedTherapist }) => {
-  const [geoMarkers, setGeoMarkers] = useState([]);
-
   useEffect(() => {
-    const fetchGeoMarkers = async () => {
-      const promises = markers.map(async (marker) => {
-        if (!marker.lat || !marker.lng) {
-          const location = await geocodeAddress(marker.address);
-          if (location) {
-            return { ...marker, lat: location.lat, lng: location.lng };
-          }
-        }
-        return marker;
-      });
-
-      const results = await Promise.all(promises);
-      setGeoMarkers(results.filter(marker => marker.lat && marker.lng));
-    };
-
-    fetchGeoMarkers();
+    console.log('Markers:', markers);
   }, [markers]);
-
-  useEffect(() => {
-    console.log('Markers:', geoMarkers);
-  }, [geoMarkers]);
 
   return (
     <MapContainer center={[31.0461, 34.8516]} zoom={8} style={{ height: "100%", width: "100%" }}>
@@ -102,7 +48,7 @@ const Map = ({ markers, userLocation, selectedTherapist }) => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-      {geoMarkers.map((marker, index) => (
+      {markers.map((marker, index) => (
         <Marker
           key={index}
           position={[marker.lat, marker.lng]}
@@ -111,7 +57,7 @@ const Map = ({ markers, userLocation, selectedTherapist }) => {
           <Popup>{marker.name}</Popup>
         </Marker>
       ))}
-      <UpdateMapView userLocation={userLocation} selectedTherapist={selectedTherapist} />
+      <UpdateMapView selectedTherapist={selectedTherapist} userLocation={userLocation} />
     </MapContainer>
   );
 };
