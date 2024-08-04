@@ -1,0 +1,46 @@
+.app-container {
+    text-align: center;
+    margin: 20px;
+  }
+  
+  .question-container {
+    margin-bottom: 20px;
+  }
+  
+  .options-container button {
+    margin: 5px;
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .options-container button:hover {
+    background-color: #dcdcdc;
+  }
+  
+  .treatment-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .treatment-item {
+    width: 30%;
+    margin: 10px;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .treatment-item h3 {
+    margin: 0 0 10px;
+  }
+  
+  .treatment-item p {
+    margin: 0;
+  }
+  
