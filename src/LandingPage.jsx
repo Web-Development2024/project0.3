@@ -15,7 +15,7 @@ import soldierImage10 from './images/soldier10.jpeg';
 import logo from './images/logo.png';
 import pressImage from './images/press-background.jpeg';
 
-const SoldierWellnessPage = () => {
+const SoldierWellnessPage = ({ navigateToMap, navigateToTree }) => {
   useEffect(() => {
     // Setup the intersection observer for the fade-in effect
     const elements = document.querySelectorAll('.fade-in');
@@ -52,14 +52,15 @@ const SoldierWellnessPage = () => {
           <div className="overlay">
             <h2>ברוכים הבאים ל-HEROCARE Wellness</h2>
             <p>
-אצלנו תמצאו את המטפלים הכי טובים, במחירים הכי משתלמים, ובדרך הכי נוחה!<br></br> הכל כדי להקל עליכם את התהליך, שלא תצטרכו לעבוד קשה יותר משכבר עבדתם.            </p>
+              אצלנו תמצאו את המטפלים הכי טובים, במחירים הכי משתלמים, ובדרך הכי נוחה!<br></br> הכל כדי להקל עליכם את התהליך, שלא תצטרכו לעבוד קשה יותר משכבר עבדתם.
+            </p>
           </div>
         </section>
 
-       <section className="questionire">
+        <section className="questionire">
           <h2>בואו להבין מהו הטיפול שאתם מחפשים<br></br> בכמה שאלות בלבד! </h2>
-          <button className='testBut'>
-לשאלון ההכוונה שלנו -{'>'}
+          <button className='testBut' onClick={navigateToTree}>
+            לשאלון ההכוונה שלנו -{'>'}
           </button>
         </section> 
 
@@ -169,7 +170,7 @@ const SoldierWellnessPage = () => {
 
         <div className="button-container fade-in">
           <button className="contact-button">מטפלים צור קשר</button>
-          <button className="contact-button">לטיפולים</button>
+          <button className="contact-button" onClick={navigateToMap}>לטיפולים</button>
         </div>
       </main>
 
