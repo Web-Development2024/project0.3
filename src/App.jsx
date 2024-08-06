@@ -3,6 +3,7 @@ import TherapistCard from './TherapistCard.jsx';
 import Map from './Map.jsx';
 import TherapistForm from './TherapistForm.jsx';
 import LandingPage from './LandingPage.jsx';
+import Tree from './Tree.jsx';
 import { auth, provider, signInWithPopup, signOut, db } from './firebaseConfig';
 import { collection, getDocs, getDoc, doc} from "firebase/firestore";
 
@@ -147,7 +148,12 @@ function App() {
           </div>
         </div>
       </div>
-
+      <div>
+      {currentPage === 'landing' && <LandingPage navigateToTree={() => setCurrentPage('tree')} />}
+      {currentPage === 'tree' && <Tree />}
+      {/* Include other pages similarly */}
+    </div>
+    
       {currentPage === 'login' && (
         <div className="login-modal">
           <button className="google-signin-button" onClick={handleGoogleSignIn}>Sign in with Google</button>
