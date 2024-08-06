@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { csv } from 'd3-fetch';
 import './Tree.css'; // Import your CSS file for styling
 
-const App = () => {  
+const Tree = () => {  
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState({});
   const [filteredTreatments, setFilteredTreatments] = useState([]);
   const [treatmentData, setTreatmentData] = useState([]);
 
   useEffect(() => {
-    csv('C:\Users\tamar\OneDrive\Documents\GitHub\project0.3_withQ\TreatmentTag.csv').then(data => {
+    csv('/TreatmentTag.csv').then(data => {
       // Map CSV data to treatmentData format
       const formattedData = data.map((d, index) => ({
         id: index + 1,
@@ -23,7 +23,7 @@ const App = () => {
       setTreatmentData(formattedData);
     });
   }, []);
-
+  
   const questions = [
     { question: 'Choose Type', options: ['A', 'B'] },
     { question: 'Choose Length', options: ['short', 'long'] },
@@ -90,4 +90,8 @@ const TreatmentList = ({ treatments }) => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(<Tree />);
+
+export default Tree;
