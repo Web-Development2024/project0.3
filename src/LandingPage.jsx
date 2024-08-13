@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './landing_style.css';
 import spaImage1 from './images/spa1.jpeg';
 import spaImage2 from './images/spa2.jpeg';
@@ -14,10 +14,38 @@ import soldierImage9 from './images/soldier9.jpeg';
 import soldierImage10 from './images/soldier10.jpeg';
 import logo from './images/logo.png';
 import pressImage from './images/press-background.jpeg';
+import emailjs from 'emailjs-com';
+
 
 const SoldierWellnessPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+    document.querySelector('.spa-container').classList.add('blur');
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    document.querySelector('.spa-container').classList.remove('blur');
+  };
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+
+    emailjs.sendForm('service_sfyq7ep', 'template_cbnou14', e.target, '17xLfBhFm0hHMgUhk')
+      .then((result) => {
+        console.log(result.text);
+        alert('Message sent successfully!');
+        closeModal();
+      }, (error) => {
+        console.error('Failed to send message:', error);
+        alert('Failed to send message. Please try again later.');
+      });
+  };
+
   useEffect(() => {
-    // Setup the intersection observer for the fade-in effect
     const elements = document.querySelectorAll('.fade-in');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -31,7 +59,6 @@ const SoldierWellnessPage = () => {
       observer.observe(element);
     });
 
-    // Cleanup the observer when the component unmounts
     return () => observer.disconnect();
   }, []);
 
@@ -39,7 +66,6 @@ const SoldierWellnessPage = () => {
     <div className="spa-container">
       <header className="spa-header" style={{ backgroundImage: `url(${spaImage8})` }}>
         <div className="header-content">
-          {/* <img src={logo} alt="HEROCARE Logo" className="logo" /> */}
           <h1>HEROCARE Wellness</h1>
           <h2>הדרך החכמה לנצל את המענק</h2>
         </div>
@@ -52,18 +78,19 @@ const SoldierWellnessPage = () => {
           <div className="overlay">
             <h2>ברוכים הבאים ל-HEROCARE Wellness</h2>
             <p>
-אצלנו תמצאו את המטפלים הכי טובים, במחירים הכי משתלמים, ובדרך הכי נוחה!<br></br> הכל כדי להקל עליכם את התהליך, שלא תצטרכו לעבוד קשה יותר משכבר עבדתם.            </p>
+              אצלנו תמצאו את המטפלים הכי טובים, במחירים הכי משתלמים, ובדרך הכי נוחה!<br></br> הכל כדי להקל עליכם את התהליך, שלא תצטרכו לעבוד קשה יותר משכבר עבדתם.
+            </p>
           </div>
         </section>
 
-        {/* <section className="about-us fade-in">
+{/* <section className="about-us fade-in">
           <h2>About Us</h2>
           <p>
             HEROCARE Wellness is dedicated to providing affordable and relaxing treatments for soldiers and reservists. Our mission is to support the well-being of those who serve by offering access to high-quality alternative therapies and massages.
           </p>
         </section> */}
 
-        <section className="services fade-in">
+<section className="services fade-in">
           <h2>השירותים שלנו</h2>
           <div className="service-grid">
             <div className="service-card">
@@ -166,9 +193,10 @@ const SoldierWellnessPage = () => {
             </div>
           </div>
         </section>
+        
 
         <div className="button-container fade-in">
-          <button className="contact-button">מטפלים צור קשר</button>
+          <button className="contact-button" onClick={openModal}>מטפלים צור קשר</button>
           <button className="contact-button">לטיפולים</button>
         </div>
       </main>
@@ -178,6 +206,26 @@ const SoldierWellnessPage = () => {
         <p>צור קשר: info@herocarewellness.com | 03-1234567</p>
         <p>כתובת: רחוב הירקון 123, תל אביב</p>
       </footer>
+
+       {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <span className="close-modal" onClick={closeModal}>&times;</span>
+            <form className="contact-form" onSubmit={sendEmail}>
+              <h2>צור קשר</h2>
+              <label>שם:</label>
+              <input type="text" name="from_name" required />
+              <label>טלפון:</label>
+              <input type="text" name="phone" required />
+              <label>אימייל:</label>
+              <input type="email" name="reply_to" required />
+              <label>הודעה:</label>
+              <textarea name="message" required></textarea>
+              <button type="submit">שלח</button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
