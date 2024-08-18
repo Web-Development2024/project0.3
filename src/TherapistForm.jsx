@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './form_style.css';
 
-import { db, storage} from './firebaseConfig';
-import { collection, addDoc} from "firebase/firestore"
+import { db, storage } from './firebaseConfig';
+import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { v4 } from 'uuid';
+import axios from 'axios';
 
 const TherapistForm = ({ onFormSubmit }) => {
   const [formData, setFormData] = useState({
@@ -23,6 +24,7 @@ const TherapistForm = ({ onFormSubmit }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [imageUpload, setImageUpload] = useState(null);
   const [certificateUpload, setCertificateUpload] = useState(null);
+  const [citySuggestions, setCitySuggestions] = useState([]);
 
   const FileTypes = Object.freeze({
     PROFILE_IMG: 0,
@@ -32,12 +34,12 @@ const TherapistForm = ({ onFormSubmit }) => {
   const dbMap = {
     [FileTypes.PROFILE_IMG]: 'profile/profile_',
     [FileTypes.CERTIFICATE]: 'certificates/cert_'
-  }
+  };
 
   const uploadFile = async (file, type, id) => {
     if (file == null) return;
     const fileName = file.name;
-    const filename = dbMap[type]+ id;
+    const filename = dbMap[type] + id;
     const fileRef = ref(storage, filename);
     console.log("uploading bytes");
     await uploadBytes(fileRef, file);
@@ -69,6 +71,35 @@ const TherapistForm = ({ onFormSubmit }) => {
     }
   };
 
+  const fetchCitySuggestions = async (query) => {
+    if (!query) return;
+    try {
+      const response = await axios.get("https://wft-geo-db.p.rapidapi.com/v1/geo/cities", {
+        headers: {
+          'X-RapidAPI-Key': '1041f5c4dbmsh8871959df9fc67dp1191cejsna4d48dbdebe5', // Your API key here
+          'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+        },
+        params: {
+          namePrefix: query,
+          limit: 10, // Limit the number of suggestions
+          countryIds: 'IL' // Restrict to Israel if desired
+        }
+      });
+      setCitySuggestions(response.data.data.map(city => city.city));
+    } catch (error) {
+      console.error("Error fetching city suggestions:", error);
+    }
+  };
+
+  const handleCityChange = (e) => {
+    const value = e.target.value;
+    setFormData((prevData) => ({
+      ...prevData,
+      city: value,
+    }));
+    fetchCitySuggestions(value);
+  };
+
   const addTherapistData = async () => {
     try {
       const id = v4();
@@ -89,7 +120,7 @@ const TherapistForm = ({ onFormSubmit }) => {
         profile_image: profile_image_path,
         certificate: certificate_path
       });
-      
+
       alert('הרשמתך התקבלה.');
     } catch (error) {
       alert(error.message);
@@ -147,142 +178,147 @@ const TherapistForm = ({ onFormSubmit }) => {
         <span className={`step ${currentStep === 2 ? 'active' : ''}`}>2. מה אני מציע?</span>
         <span className={`step ${currentStep === 3 ? 'active' : ''}`}>3. חשוב לדעת עליי</span>
       </div>
-<div className='questions'>
-      <form onSubmit={handleSubmit}>
-        {currentStep === 1 && (
-          <div className="step-form">
-            <h2>בואו נכיר :</h2>
-            <label htmlFor="name">שם: *</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-            <label htmlFor="phone">טלפון: *</label>
-            <input
-              type="text"
-              id="phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-            />
-            <div className="form-navigation">
-              <button type="button" className="next-button" onClick={handleNextStep}>הבא</button>
-            </div>
-          </div>
-        )}
-
-        {currentStep === 2 && (
-          <div className="step-form">
-            <h2>קצת על הטיפולים שלי</h2>
-            <label htmlFor="categories">תחומי טיפול: *</label>
-            <div id="categories" className="checkbox-container">
-              <div className="scrollable-checkbox">
-                <label>
-                  <input
-                    type="checkbox"
-                    name="categories"
-                    value="טיפול 1"
-                    checked={formData.categories.includes('טיפול 1')}
-                    onChange={handleChange}
-                  />
-                  טיפול 1
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    name="categories"
-                    value="טיפול 2"
-                    checked={formData.categories.includes('טיפול 2')}
-                    onChange={handleChange}
-                  />
-                  טיפול 2
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    name="categories"
-                    value="טיפול 3"
-                    checked={formData.categories.includes('טיפול 3')}
-                    onChange={handleChange}
-                  />
-                  טיפול 3
-                </label>
-                {/* Add more checkboxes as needed */}
+      <div className='questions'>
+        <form onSubmit={handleSubmit}>
+          {currentStep === 1 && (
+            <div className="step-form">
+              <h2>בואו נכיר :</h2>
+              <label htmlFor="name">שם: *</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+              <label htmlFor="phone">טלפון: *</label>
+              <input
+                type="text"
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+              />
+              <div className="form-navigation">
+                <button type="button" className="next-button" onClick={handleNextStep}>הבא</button>
               </div>
             </div>
-            <label htmlFor="city">עיר: *</label>
-            <input
-              type="text"
-              id="city"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              required
-            />
-             <label htmlFor="address">כתובת: *</label>
-            <input
-              type="text"
-              id="address"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              required
-            />
-            <div className="form-navigation">
-              <button type="button" className="prev-button" onClick={handlePrevStep}>הקודם</button>
-              <button type="button" className="next-button" onClick={handleNextStep}>הבא</button>
-            </div>
-          </div>
-        )}
+          )}
 
-        {currentStep === 3 && (
-          <div className="step-form">
-            <h2>פרטים נוספים</h2>
-           
-            <label htmlFor="about">אודות: *</label>
-            <textarea
-              id="about"
-              name="about"
-              value={formData.about}
-              onChange={handleChange}
-              required
-            ></textarea>
-            <label htmlFor="discountType">סוג הנחה:</label>
-            <input
-              type="text"
-              id="discountType"
-              name="discountType"
-              value={formData.discountType}
-              onChange={handleChange}
-            />
-            <label htmlFor="documents">העלה מסמכים:</label>
-            <input
-              type="file"
-              id="documents"
-              name="documents"
-              onChange={(event) => {setImageUpload(event.target.files[0])}}
-              multiple
-            />
-            <br></br>
-            <label htmlFor="profilePicture">העלה תמונת פרופיל:</label>
-            <input
-              type="file"
-              id="profilePicture"
-              name="profilePicture"
-              onChange={(event) => {setCertificateUpload(event.target.files[0])}}
-            />
-            <div id="form-navigation">
-              <button type="button" className="prev-button" onClick={handlePrevStep}>הקודם</button>
-              <button type="submit" className="submit-button">שלח</button>
+          {currentStep === 2 && (
+            <div className="step-form">
+              <h2>קצת על הטיפולים שלי</h2>
+              <label htmlFor="categories">תחומי טיפול: *</label>
+              <div id="categories" className="checkbox-container">
+                <div className="scrollable-checkbox">
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="categories"
+                      value="טיפול 1"
+                      checked={formData.categories.includes('טיפול 1')}
+                      onChange={handleChange}
+                    />
+                    טיפול 1
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="categories"
+                      value="טיפול 2"
+                      checked={formData.categories.includes('טיפול 2')}
+                      onChange={handleChange}
+                    />
+                    טיפול 2
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="categories"
+                      value="טיפול 3"
+                      checked={formData.categories.includes('טיפול 3')}
+                      onChange={handleChange}
+                    />
+                    טיפול 3
+                  </label>
+                  {/* Add more checkboxes as needed */}
+                </div>
+              </div>
+              <label htmlFor="city">עיר: *</label>
+              <input
+                list="city-list"
+                id="city"
+                name="city"
+                value={formData.city}
+                onChange={handleCityChange}
+                required
+              />
+              <datalist id="city-list">
+                {citySuggestions.map((city, index) => (
+                  <option key={index} value={city} />
+                ))}
+              </datalist>
+              <label htmlFor="address">כתובת: *</label>
+              <input
+                type="text"
+                id="address"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                required
+              />
+              <div className="form-navigation">
+                <button type="button" className="prev-button" onClick={handlePrevStep}>הקודם</button>
+                <button type="button" className="next-button" onClick={handleNextStep}>הבא</button>
+              </div>
             </div>
-          </div>
-        )}
-      </form>
+          )}
+
+          {currentStep === 3 && (
+            <div className="step-form">
+              <h2>פרטים נוספים</h2>
+
+              <label htmlFor="about">אודות: *</label>
+              <textarea
+                id="about"
+                name="about"
+                value={formData.about}
+                onChange={handleChange}
+                required
+              ></textarea>
+              <label htmlFor="discountType">סוג הנחה:</label>
+              <input
+                type="text"
+                id="discountType"
+                name="discountType"
+                value={formData.discountType}
+                onChange={handleChange}
+              />
+              <label htmlFor="documents">העלה מסמכים:</label>
+              <input
+                type="file"
+                id="documents"
+                name="documents"
+                onChange={(event) => { setImageUpload(event.target.files[0]) }}
+                multiple
+              />
+              <br></br>
+              <label htmlFor="profilePicture">העלה תמונת פרופיל:</label>
+              <input
+                type="file"
+                id="profilePicture"
+                name="profilePicture"
+                onChange={(event) => { setCertificateUpload(event.target.files[0]) }}
+              />
+              <div id="form-navigation">
+                <button type="button" className="prev-button" onClick={handlePrevStep}>הקודם</button>
+                <button type="submit" className="submit-button">שלח</button>
+              </div>
+            </div>
+          )}
+        </form>
       </div>
     </div>
   );
