@@ -1,0 +1,152 @@
+.app-container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 80%;
+  max-width: 6000px;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #f4f7fb, #eaeff3);
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  margin: 40px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.option-button {
+  background-color: #4a90e2;
+  border: none;
+  color: white;
+  padding: 14px 28px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 18px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+  flex-grow: 1;
+  flex-basis: calc(33.333% - 30px);
+  box-sizing: border-box;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.option-button:hover {
+  background-color: #357ab8;
+  transform: scale(1.07);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Adjustments to animations and transitions */
+@keyframes fadeIn {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+
+.progress-bar-container {
+  width: 100%;
+  max-width: 700px;
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  direction: rtl;
+}
+
+.progress-bar {
+  height: 10px;
+  background-color: #4a90e2;
+  transition: width 0.5s ease-in-out;
+}
+
+/* New Question Wrapper */
+.question-wrapper {
+  width: 100%;
+  max-width: 2000px; /* Adjust the max-width as per your needs */
+  height: 500px; /* A big static height for the wrapper */
+  background-color: #ffffff; /* You can choose any background color */
+  border-radius: 15px; /* Rounded corners */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Add a shadow for depth */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.question-container {
+  text-align: center;
+  width: 100%;
+  max-width: 700px;
+  height: auto; /* Remove fixed height to let it adjust within the wrapper */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+.options-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  width: 100%;
+}
+
+
+
+.navigation-buttons {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 700px;
+  margin-top: 20px;
+}
+
+.navigation-buttons button {
+  flex: 1;
+  max-width: 150px;
+  margin-right: 10px;
+}
+
+.navigation-buttons button[disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.treatment-item {
+  font-family: 'Arial', sans-serif;
+  background-color: #f7f7f7;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+  color: #000 !important;
+  z-index: 9999 !important;
+  position: relative;
+}
+
+.treatment-item h3, .treatment-item p {
+  font-family: 'Arial', sans-serif;
+  color: #000 !important;
+  opacity: 1 !important;
+  font-size: 18px;
+  line-height: 1.5;
+  visibility: visible !important;
+}
+
+body, .treatment-item {
+  font-family: 'Roboto', sans-serif;
+}

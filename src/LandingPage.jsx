@@ -16,14 +16,14 @@ import logo from './images/logo.png';
 import pressImage from './images/press-background.jpeg';
 import emailjs from 'emailjs-com';
 
-
-const SoldierWellnessPage = () => {
+const SoldierWellnessPage = ({ navigateToMap, navigateToTree }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
     setIsModalOpen(true);
     document.querySelector('.spa-container').classList.add('blur');
   };
+
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -32,7 +32,6 @@ const SoldierWellnessPage = () => {
 
   const sendEmail = (e) => {
     e.preventDefault();
-
 
     emailjs.sendForm('service_sfyq7ep', 'template_cbnou14', e.target, '17xLfBhFm0hHMgUhk')
       .then((result) => {
@@ -46,6 +45,7 @@ const SoldierWellnessPage = () => {
   };
 
   useEffect(() => {
+    // Setup the intersection observer for the fade-in effect
     const elements = document.querySelectorAll('.fade-in');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -59,6 +59,7 @@ const SoldierWellnessPage = () => {
       observer.observe(element);
     });
 
+    // Cleanup the observer when the component unmounts
     return () => observer.disconnect();
   }, []);
 
@@ -72,25 +73,23 @@ const SoldierWellnessPage = () => {
       </header>
 
       <main className="spa-main">
-        <section className="spa-info fade-in parallax" 
-        style={{ backgroundImage: `url(${spaImage5})` }}
-        >
+        <section className="spa-info fade-in parallax" style={{ backgroundImage: `url(${spaImage5})` }}>
           <div className="overlay">
             <h2>ברוכים הבאים ל-HEROCARE Wellness</h2>
             <p>
-              אצלנו תמצאו את המטפלים הכי טובים, במחירים הכי משתלמים, ובדרך הכי נוחה!<br></br> הכל כדי להקל עליכם את התהליך, שלא תצטרכו לעבוד קשה יותר משכבר עבדתם.
+              אצלנו תמצאו את המטפלים הכי טובים, במחירים הכי משתלמים, ובדרך הכי נוחה!<br /> הכל כדי להקל עליכם את התהליך, שלא תצטרכו לעבוד קשה יותר משכבר עבדתם.
             </p>
           </div>
         </section>
 
-{/* <section className="about-us fade-in">
-          <h2>About Us</h2>
-          <p>
-            HEROCARE Wellness is dedicated to providing affordable and relaxing treatments for soldiers and reservists. Our mission is to support the well-being of those who serve by offering access to high-quality alternative therapies and massages.
-          </p>
-        </section> */}
+        <section className="questionire">
+          <h2>בואו להבין מהו הטיפול שאתם מחפשים<br /> בכמה שאלות בלבד! </h2>
+          <button className='testBut' onClick={navigateToTree}>
+            לשאלון ההכוונה שלנו
+          </button>
+        </section> 
 
-<section className="services fade-in">
+        <section className="services fade-in">
           <h2>השירותים שלנו</h2>
           <div className="service-grid">
             <div className="service-card">
@@ -193,11 +192,10 @@ const SoldierWellnessPage = () => {
             </div>
           </div>
         </section>
-        
 
         <div className="button-container fade-in">
           <button className="contact-button" onClick={openModal}>מטפלים צור קשר</button>
-          <button className="contact-button">לטיפולים</button>
+          <button className="contact-button" onClick={navigateToMap}>לטיפולים</button>
         </div>
       </main>
 
@@ -207,7 +205,7 @@ const SoldierWellnessPage = () => {
         <p>כתובת: רחוב הירקון 123, תל אביב</p>
       </footer>
 
-       {isModalOpen && (
+      {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal">
             <span className="close-modal" onClick={closeModal}>&times;</span>

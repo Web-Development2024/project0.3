@@ -3,8 +3,9 @@ import TherapistCard from './TherapistCard.jsx';
 import Map from './Map.jsx';
 import TherapistForm from './TherapistForm.jsx';
 import LandingPage from './LandingPage.jsx';
+import Tree from './Tree.jsx'; // Make sure this is imported correctly
 import { auth, provider, signInWithPopup, signOut, db } from './firebaseConfig';
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 import axios from 'axios';
 import './index.css';
 
@@ -166,6 +167,10 @@ function App() {
     }
   };
 
+  const navigateToTree = () => {
+    setCurrentPage('tree');
+  };
+
   const requestUserLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -207,6 +212,9 @@ function App() {
             <button className="form-toggle-button" onClick={navigateToForm}>
               הוסף מטפל חדש
             </button>
+            <button className="form-toggle-button" onClick={navigateToTree}>
+              פתח עץ טיפולים
+            </button>
           </div>
         </div>
       )}
@@ -217,16 +225,20 @@ function App() {
         </div>
       )}
       {currentPage === 'landing' && <LandingPage navigateToMap={() => setCurrentPage('map')} />}
+      {currentPage === 'tree' && <Tree />}
+      {currentPage === 'tree' && <Tree navigateToMap={navigateToMap} />}
       {currentPage === 'map' && (
         <div className="main-content">
           <div className="list-section">
             {therapists.map((therapist) => (
-              <TherapistCard
-                key={therapist.id}
-                therapist={therapist}
-                onHover={handleCardHover}
-                onClick={handleCardClick}
-              />
+              <div 
+                key={therapist.id} 
+                onMouseEnter={() => handleCardHover(therapist)}
+                onMouseLeave={() => handleCardHover(null)}
+                onClick={() => handleCardClick(therapist)}
+              >
+                <TherapistCard therapist={therapist} />
+              </div>
             ))}
           </div>
           <div className="map-section">
@@ -249,4 +261,5 @@ function App() {
     </div>
   );
 }
+
 export default App;
