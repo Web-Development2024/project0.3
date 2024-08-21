@@ -8,6 +8,7 @@ import { auth, provider, signInWithPopup, signOut, db } from './firebaseConfig';
 import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 import axios from 'axios';
 import './index.css';
+import FilterSection from './FilterSection.jsx';
 
 const geocodeAddress = async (address) => {
   try {
@@ -43,6 +44,8 @@ function App() {
   const [userLocation, setUserLocation] = useState(null);
   const [therapists, setTherapists] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filteredTherapists, setFilteredTherapists] = useState([]);
+  const [showFilter, setShowFilter] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
@@ -91,6 +94,7 @@ function App() {
       const therapistsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       console.log('Fetched Therapists Data:', therapistsData);
       setTherapists(therapistsData);
+      setFilteredTherapists(therapistsData);
     } 
     catch (error) {
       console.error("Error fetching therapists data: ", error);
@@ -190,6 +194,21 @@ function App() {
     }
   };
 
+
+  const handleFilterToggle = () => {
+    setShowFilter(!showFilter);
+  };
+
+  const handleFilter = (criteria) => {
+    const filtered = therapists.filter(therapist => {
+      const locationMatch = criteria.location.length === 0 || criteria.location.some(city => city.trim() === therapist.city.trim()); //remove whitespaces
+      console.log("Checking", therapist.city, "against", criteria.location, "Result:", locationMatch);
+      const therapyTypeMatch = criteria.therapyType.length === 0 || criteria.therapyType.some(type => therapist.categories.includes(type));
+      return locationMatch && therapyTypeMatch;
+    });
+    setFilteredTherapists(filtered);
+  };
+
   return (
     <div className="container">
       {currentPage !== 'login' && (
@@ -230,7 +249,11 @@ function App() {
       {currentPage === 'map' && (
         <div className="main-content">
           <div className="list-section">
-            {therapists.map((therapist) => (
+          <button className="filter-toggle-button" onClick={handleFilterToggle}>
+              {showFilter ? 'הסתר סינון' : 'סינון'}
+            </button>
+            {showFilter && <FilterSection onFilter={handleFilter} />}
+            {filteredTherapists.map((therapist) => (
               <div 
                 key={therapist.id} 
                 onMouseEnter={() => handleCardHover(therapist)}

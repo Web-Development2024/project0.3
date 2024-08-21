@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import Select from 'react-select';
 import './form_style.css';
 
 import { db, storage } from './firebaseConfig';
+import fetchCities from './FetchCities.jsx';
+import TreatmentsList from './TreatmentList.jsx';
 import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { v4 } from 'uuid';
@@ -25,7 +28,16 @@ const TherapistForm = ({ onFormSubmit }) => {
   const [imageUpload, setImageUpload] = useState(null);
   const [certificateUpload, setCertificateUpload] = useState(null);
   const [citySuggestions, setCitySuggestions] = useState([]);
+  const [cities, setCities] = useState([]);
 
+  useEffect(() => {
+    const loadCities = async () => {
+      const cityOptions = await fetchCities();
+      setCities(cityOptions);
+    };
+    loadCities();
+  }, []);
+  
   const FileTypes = Object.freeze({
     PROFILE_IMG: 0,
     CERTIFICATE: 1
@@ -71,33 +83,21 @@ const TherapistForm = ({ onFormSubmit }) => {
     }
   };
 
-  const fetchCitySuggestions = async (query) => {
-    if (!query) return;
-    try {
-      const response = await axios.get("https://wft-geo-db.p.rapidapi.com/v1/geo/cities", {
-        headers: {
-          'X-RapidAPI-Key': '1041f5c4dbmsh8871959df9fc67dp1191cejsna4d48dbdebe5', // Your API key here
-          'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
-        },
-        params: {
-          namePrefix: query,
-          limit: 10, // Limit the number of suggestions
-          countryIds: 'IL' // Restrict to Israel if desired
-        }
-      });
-      setCitySuggestions(response.data.data.map(city => city.city));
-    } catch (error) {
-      console.error("Error fetching city suggestions:", error);
-    }
-  };
+  const handleCategoryChange = (selectedOptions) => {
+    const categories = selectedOptions ? selectedOptions.map(option => option.value) : [];
+    setFormData(prevData => ({
+        ...prevData,
+        categories: categories
+    }));
+};
 
-  const handleCityChange = (e) => {
-    const value = e.target.value;
+
+  const handleCityChange = (selectedOption) => {
+    const value = selectedOption ? selectedOption.value : '';
     setFormData((prevData) => ({
       ...prevData,
       city: value,
     }));
-    fetchCitySuggestions(value);
   };
 
   const addTherapistData = async () => {
@@ -211,55 +211,30 @@ const TherapistForm = ({ onFormSubmit }) => {
             <div className="step-form">
               <h2>קצת על הטיפולים שלי</h2>
               <label htmlFor="categories">תחומי טיפול: *</label>
-              <div id="categories" className="checkbox-container">
-                <div className="scrollable-checkbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="categories"
-                      value="טיפול 1"
-                      checked={formData.categories.includes('טיפול 1')}
-                      onChange={handleChange}
-                    />
-                    טיפול 1
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="categories"
-                      value="טיפול 2"
-                      checked={formData.categories.includes('טיפול 2')}
-                      onChange={handleChange}
-                    />
-                    טיפול 2
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="categories"
-                      value="טיפול 3"
-                      checked={formData.categories.includes('טיפול 3')}
-                      onChange={handleChange}
-                    />
-                    טיפול 3
-                  </label>
-                  {/* Add more checkboxes as needed */}
-                </div>
-              </div>
-              <label htmlFor="city">עיר: *</label>
-              <input
-                list="city-list"
-                id="city"
-                name="city"
-                value={formData.city}
-                onChange={handleCityChange}
-                required
+              <Select
+                  isMulti
+                  name="categories"
+                  options={TreatmentsList.map(treatment => ({
+                    label: treatment.type,
+                    value: treatment.type
+                  }))}
+                  value={TreatmentsList.filter(treatment => formData.categories.includes(treatment.type)).map(treatment => ({
+                    label: treatment.type,
+                    value: treatment.type
+                  }))}
+                  onChange={handleCategoryChange}
+                  className="basic-multi-select"
+                  classNamePrefix="select"
               />
-              <datalist id="city-list">
-                {citySuggestions.map((city, index) => (
-                  <option key={index} value={city} />
-                ))}
-              </datalist>
+              <label htmlFor="city">עיר: *</label>
+              <Select
+                name="city"
+                options={cities}
+                value={cities.find(option => option.value === formData.city)}
+                onChange={handleCityChange}
+                className="basic-single-select"
+                classNamePrefix="select"
+              />
               <label htmlFor="address">כתובת: *</label>
               <input
                 type="text"
