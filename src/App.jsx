@@ -202,9 +202,9 @@ function App() {
   const handleFilter = (criteria) => {
     const filtered = therapists.filter(therapist => {
       const locationMatch = criteria.location.length === 0 || criteria.location.some(city => city.trim() === therapist.city.trim()); //remove whitespaces
-      console.log("Checking", therapist.city, "against", criteria.location, "Result:", locationMatch);
       const therapyTypeMatch = criteria.therapyType.length === 0 || criteria.therapyType.some(type => therapist.categories.includes(type));
-      return locationMatch && therapyTypeMatch;
+      const genderMatch = !criteria.gender || therapist.gender === criteria.gender;
+      return locationMatch && therapyTypeMatch && genderMatch;
     });
     setFilteredTherapists(filtered);
   };

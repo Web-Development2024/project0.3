@@ -10,10 +10,18 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { v4 } from 'uuid';
 import axios from 'axios';
 
+const genderOptions = [
+  { value: 'גבר', label: 'גבר' },
+    { value: 'אישה', label: 'אישה' },
+    { value: 'אחר', label: 'אחר' },
+    { value: 'מעדיף לא להגיד', label: 'מעדיף לא להגיד' },
+];
+
 const TherapistForm = ({ onFormSubmit }) => {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
+    gender: '',
     categories: [],
     city: '',
     address: '',
@@ -100,6 +108,14 @@ const TherapistForm = ({ onFormSubmit }) => {
     }));
   };
 
+  const handleGenderChange = (selectedOption) => {
+    const gender = selectedOption ? selectedOption.value : '';
+    setFormData((prevData) => ({
+      ...prevData,
+      gender: gender,
+    }));
+  };
+
   const addTherapistData = async () => {
     try {
       const id = v4();
@@ -112,6 +128,7 @@ const TherapistForm = ({ onFormSubmit }) => {
       await addDoc(collection(db, "therapist-data"), {
         name: formData.name,
         phone: formData.phone,
+        gender: formData.gender,
         categories: formData.categories,
         city: formData.city,
         address: formData.address,
@@ -200,6 +217,15 @@ const TherapistForm = ({ onFormSubmit }) => {
                 value={formData.phone}
                 onChange={handleChange}
                 required
+              />
+              <label htmlFor="gender">מגדר: *</label>
+              <Select
+                name="gender"
+                options={genderOptions}
+                value={genderOptions.find(option => option.value === formData.gender)}
+                onChange={handleGenderChange}
+                className="basic-single-select"
+                classNamePrefix="select"
               />
               <div className="form-navigation">
                 <button type="button" className="next-button" onClick={handleNextStep}>הבא</button>
