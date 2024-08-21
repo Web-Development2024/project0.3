@@ -4,8 +4,13 @@ import Select from 'react-select';
 import TreatmentsList from './TreatmentList.jsx';
 import fetchCities from './FetchCities.jsx';
 
+const genderOptions = [
+  { value: 'גבר', label: 'גבר' },
+    { value: 'אישה', label: 'אישה' },
+];
+
 const FilterSection = ({ onFilter }) => {
-    const initialCriteria = { location: [], therapyType: [] };
+    const initialCriteria = { location: [], therapyType: [], gender: '' };
     const [filterCriteria, setFilterCriteria] = useState(initialCriteria);
     const [cities, setCities] = useState([]);
 
@@ -32,6 +37,13 @@ const FilterSection = ({ onFilter }) => {
       therapyType: selectedTherapies,
     });
   };
+
+  const handleGenderChange = (selectedOption) => {
+    setFilterCriteria({
+      ...filterCriteria,
+      gender: selectedOption ? selectedOption.value : '',
+    });
+};
 
   const applyFilter = () => {
     onFilter(filterCriteria);
@@ -74,6 +86,18 @@ const FilterSection = ({ onFilter }) => {
           classNamePrefix="select"
         />
       </label>
+      <label>
+                מגדר
+                <Select
+                    name="gender"
+                    options={genderOptions}
+                    value={genderOptions.find(option => option.value === filterCriteria.gender)}
+                    onChange={handleGenderChange}
+                    className="basic-single-select"
+                    classNamePrefix="select"
+                    placeholder="בחר מגדר"
+                />
+            </label>
       <button onClick={applyFilter}>סנן</button>
       <button onClick={clearFilters}>נקה סינון</button>
     </div>
