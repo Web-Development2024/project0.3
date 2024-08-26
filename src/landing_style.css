@@ -12,10 +12,11 @@ body {
   }
   
   .header {
+    position: fixed;
+    top: 0;
+    z-index: 1000;
     width: 100%;
-    background-size: cover;
-    color: white;
-    padding: 40px 0;
+
   }
   
   .navbar {
@@ -171,6 +172,9 @@ body {
     max-width: 1200px;
     padding: 20px;
     margin: 0 auto;
+    overflow: visible; /* Ensure overflow is visible */
+    position: relative; /* This should generally be fine, but ensure it doesn't interfere */
+
   }
   
   .spa-info,

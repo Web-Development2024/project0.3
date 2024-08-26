@@ -66,10 +66,10 @@ const Tree = ({ navigateToMap }) => {
         <>
           <TreatmentList TreatmentsList={filteredTreatments} />
           <div className="navigation-buttons">
-            <button className="option-button" onClick={navigateToMap}>
-              Take me to find the suitable treatment
+            <button className="option-button1" onClick={navigateToMap}>
+              קח אותי לעמוד הטיפולים
             </button>
-          </div>
+          </div>
         </>
       )}
     </div>
