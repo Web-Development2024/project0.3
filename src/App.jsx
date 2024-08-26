@@ -245,7 +245,6 @@ function App() {
         </div>
       )}
       {currentPage === 'landing' && <LandingPage navigateToMap={() => setCurrentPage('map')} />}
-      {currentPage === 'tree' && <Tree />}
       {currentPage === 'tree' && <Tree navigateToMap={navigateToMap} />}
       {currentPage === 'map' && (
         <div className="main-content">
