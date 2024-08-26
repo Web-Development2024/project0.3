@@ -12,13 +12,8 @@ const TherapistCard = ({ therapist, onHover, onClick }) => {
           <p className="therapist-about">{therapist.therapy_type}</p>
         </div>
         <div className="therapist-details">
-          <div className="phone-tooltip">
-            <span className="tooltip">
-              <span className="tooltiptext">{therapist.categories.join(', ')}</span>
-            </span>
-            <p className="therapist-phone">טלפון: {therapist.phone}</p>
-          </div>
-          <p>מיקום: {therapist.address + ', ' + therapist.city}</p>
+          <p>{therapist.categories.join(', ')}</p>
+          <p>{therapist.address + ', ' + therapist.city}</p>
         </div>
       </div>
       <img 

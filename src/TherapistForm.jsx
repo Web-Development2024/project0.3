@@ -35,7 +35,6 @@ const TherapistForm = ({ onFormSubmit }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [imageUpload, setImageUpload] = useState(null);
   const [certificateUpload, setCertificateUpload] = useState(null);
-  const [citySuggestions, setCitySuggestions] = useState([]);
   const [cities, setCities] = useState([]);
 
   useEffect(() => {
@@ -58,7 +57,6 @@ const TherapistForm = ({ onFormSubmit }) => {
 
   const uploadFile = async (file, type, id) => {
     if (file == null) return;
-    const fileName = file.name;
     const filename = dbMap[type] + id;
     const fileRef = ref(storage, filename);
     console.log("uploading bytes");
@@ -302,7 +300,7 @@ const TherapistForm = ({ onFormSubmit }) => {
                 type="file"
                 id="documents"
                 name="documents"
-                onChange={(event) => { setImageUpload(event.target.files[0]) }}
+                onChange={(event) => { setCertificateUpload(event.target.files[0]) }}
                 multiple
               />
               <br></br>
@@ -311,7 +309,7 @@ const TherapistForm = ({ onFormSubmit }) => {
                 type="file"
                 id="profilePicture"
                 name="profilePicture"
-                onChange={(event) => { setCertificateUpload(event.target.files[0]) }}
+                onChange={(event) => { setImageUpload(event.target.files[0]) }}
               />
               <div id="form-navigation">
                 <button type="button" className="prev-button" onClick={handlePrevStep}>הקודם</button>

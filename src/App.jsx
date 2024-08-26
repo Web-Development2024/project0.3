@@ -13,18 +13,18 @@ import FilterSection from './FilterSection.jsx';
 const geocodeAddress = async (address) => {
   try {
     console.log(`Geocoding address: ${address}`);
-    const response = await axios.get(`https://nominatim.openstreetmap.org/search`, {
+    const response = await axios.get('https://api.opencagedata.com/geocode/v1/json', {
       params: {
         q: address,
-        format: 'json',
-        addressdetails: 1,
-        limit: 1,
-      }
+        key: '6fff56fb57b2420baacb17fc4d6853e5', // Your OpenCage API key
+      },
+				 
+	   
     });
 
-    if (response.data && response.data.length > 0) {
-      const { lat, lon } = response.data[0];
-      return { lat: parseFloat(lat), lng: parseFloat(lon) };
+    if (response.data && response.data.results.length > 0) {
+      const { lat, lng } = response.data.results[0].geometry;
+      return { lat, lng };
     } else {
       console.error('Geocoding API error: No results found for', address);
       return null;
@@ -34,6 +34,7 @@ const geocodeAddress = async (address) => {
     return null;
   }
 };
+
 
 function App() {
   const [markers, setMarkers] = useState([]);
@@ -226,10 +227,10 @@ function App() {
               בית
             </button>
             <button className="form-toggle-button" onClick={navigateToMap}>
-              הצג מפה
+              מצא טיפול
             </button>
             <button className="form-toggle-button" onClick={navigateToForm}>
-              הוסף מטפל חדש
+              הירשם כמטפל 
             </button>
             <button className="form-toggle-button" onClick={navigateToTree}>
               פתח עץ טיפולים
@@ -271,12 +272,8 @@ function App() {
             <div className="hovered-therapist-info">
               <div className="modal-content">
                 <h2>{hoveredTherapist.name}</h2>
-                <p>{hoveredTherapist.description}</p>
-                <p>{hoveredTherapist.phone}</p>
-                <p>{hoveredTherapist.address} {hoveredTherapist.city}</p>
                 <p>{hoveredTherapist.about}</p>
-                
-                <img src={hoveredTherapist.profile_image} alt={hoveredTherapist.name} />
+                <p>טל: {hoveredTherapist.phone}</p>
               </div>
             </div>
           )}
