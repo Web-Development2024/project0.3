@@ -271,9 +271,11 @@ function App() {
             <div className="hovered-therapist-info">
               <div className="modal-content">
                 <h2>{hoveredTherapist.name}</h2>
-                <p>{hoveredTherapist.phone}</p>
-                <p>{hoveredTherapist.about}</p>
                 <p>{hoveredTherapist.description}</p>
+                <p>{hoveredTherapist.phone}</p>
+                <p>{hoveredTherapist.address} {hoveredTherapist.city}</p>
+                <p>{hoveredTherapist.about}</p>
+                
                 <img src={hoveredTherapist.profile_image} alt={hoveredTherapist.name} />
               </div>
             </div>
