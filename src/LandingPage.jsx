@@ -72,6 +72,7 @@ const SoldierWellnessPage = ({ navigateToMap, navigateToTree }) => {
         </div>
       </header>
 
+
       <main className="spa-main">
         <section className="spa-info fade-in parallax" style={{ backgroundImage: `url(${spaImage5})` }}>
           <div className="overlay">
