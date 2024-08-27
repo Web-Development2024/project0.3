@@ -233,8 +233,7 @@ function App() {
               הירשם כמטפל 
             </button>
             <button className="form-toggle-button" onClick={navigateToTree}>
-              פתח עץ טיפולים
-            </button>
+התאם לי טיפול            </button>
           </div>
         </div>
       )}
