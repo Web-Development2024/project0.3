@@ -523,14 +523,11 @@ body {
     margin: 0 auto;
   }
   
+
   .testBut {
-    width: fit-content;
-    height: 80px;
-    border-radius: 20px;
-    font-size: x-large;
-    background-color: #BEA69F !important;
-    color: #ffffff;
+   display: none;
   }
+
   
   .testBut:hover {
     background-color: #D49A89 !important;
